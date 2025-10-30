@@ -1,3 +1,4 @@
+/** @import must precede all other statements */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
 
 @tailwind base;
@@ -5,6 +6,10 @@
 @tailwind utilities;
 
 @layer base {
+  /**
+   * Tailwind CSS theme
+   * Keep HSL variables to match tailwind.config.ts expectations
+  */
   :root {
     --background: 0 0% 100%;
     --foreground: 230 24% 12%;
@@ -105,7 +110,7 @@
     @apply border-border;
   }
 
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; font-size: 17px; }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
   }
@@ -125,6 +130,18 @@
   code {
     overflow-x: auto;
     white-space: pre;
+  }
+}
+
+@layer utilities {
+  .text-gradient-brand { @apply bg-gradient-to-r from-brand-cyan via-brand-magenta to-brand-yellow bg-clip-text text-transparent; }
+  .bg-gradient-brand { @apply bg-gradient-to-r from-brand-cyan via-brand-magenta to-brand-yellow; }
+  .anim-delay-100 { animation-delay: 100ms; }
+  .anim-delay-200 { animation-delay: 200ms; }
+  .anim-delay-300 { animation-delay: 300ms; }
+  .anim-delay-400 { animation-delay: 400ms; }
+  .will-change-transform {
+    will-change: transform, opacity;
   }
 }
 

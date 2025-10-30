@@ -1,23 +1,32 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useInViewAnimation } from "@/hooks/useInViewAnimation";
+import { use, useState } from "react";
 
 const servicios = [
   "Catálogos",
-  "Volantes",
   "Dípticos",
   "Trípticos",
   "Carpetas",
   "Afiches",
   "Bolsas de papel",
-  "Display",
   "Calendarios",
-  "Agendas",
   "Autoadhesivos",
-  "Estuches",
-  "Otros",
+  "Tarjetas",
 ];
+
+const imagenes: Record<string, string> = {
+  "Catálogos": "public/assets/images/servicios/catalogo.jpg",
+  "Dípticos": "/assets/images/servicios/dipticos.jpg",
+  "Trípticos": "/assets/images/servicios/tripticos.jpg",
+  "Carpetas": "/assets/images/servicios/carpetas.png",
+  "Afiches": "/assets/images/servicios/afiches.jpg",
+  "Bolsas de papel": "/assets/images/servicios/bolsas.jpg",
+  "Calendarios": "/assets/images/servicios/calendarios.jpg",
+  "Autoadhesivos": "/assets/images/servicios/autoadhesivos.jpg",
+  "Tarjetas": "public/assets/images/servicios/tarjetas.jpg",
+};
 
 export default function Index() {
   const [status, setStatus] = useState<string | null>(null);
@@ -28,14 +37,25 @@ export default function Index() {
     (e.currentTarget as HTMLFormElement).reset();
   };
 
+   // Hook para la hero
+  const { ref: heroRef, isVisible: heroVisible } = useInViewAnimation<HTMLDivElement>();
+  const { ref: quienesRef, isVisible: quienesVisible } = useInViewAnimation<HTMLDivElement>();
+  const { ref: serviciosRef, isVisible: serviciosVisible } = useInViewAnimation<HTMLDivElement>();
+  const { ref: ctaRef, isVisible: ctaVisible } = useInViewAnimation<HTMLDivElement>();
+  const { ref: contactoRef, isVisible: contactoVisible } = useInViewAnimation<HTMLDivElement>();
+
   return (
     <main>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50">
+      <section 
+        ref={heroRef}
+        className={`relative overflow-hidden bg-gradient-to-b from-white to-slate-50 ${
+          heroVisible ? "animate-fade-up" : "opacity-0 translate-y-6"}`}
+        >
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(1200px_600px_at_50%_-200px,theme(colors.brand.cyan)/20%_0%,transparent_60%),radial-gradient(800px_400px_at_80%_0%,theme(colors.brand.magenta)/15%_0%,transparent_60%)]" />
-        <div className="container mx-auto grid gap-8 py-24 md:grid-cols-2 md:items-center">
+        <div className="container mx-auto grid gap-8 py-16 md:grid-cols-2 md:items-center">
           <div>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs text-muted-foreground">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs text-muted-foreground animate-fade-up">
               <span className="inline-flex h-2 w-2 rounded-full bg-brand-cyan" />
               <span className="inline-flex h-2 w-2 rounded-full bg-brand-magenta" />
               <span className="inline-flex h-2 w-2 rounded-full bg-brand-yellow" />
@@ -44,17 +64,17 @@ export default function Index() {
             <img
               src="https://cdn.builder.io/api/v1/image/assets%2F663c00dc1c6e4b4bb40553918806045f%2F05aeb48d76b0480bae13774c377c646d?format=webp&width=600"
               alt="Aries · Artes Gráficas"
-              className="mb-4 h-16 w-auto md:h-20"
+              className="mb-4 h-16 w-auto md:h-20 animate-float"
               onError={(e) => ((e.currentTarget.style.display = "none"))}
             />
-            <h1 className="text-balance text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl">
+            <h1 className="text-balance text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl md:text-7xl animate-fade-up anim-delay-100">
               Aries · Artes Gráficas
             </h1>
-            <p className="mt-4 max-w-xl text-lg text-muted-foreground">
+            <p className="mt-4 max-w-xl text-xl text-muted-foreground animate-fade-up anim-delay-200">
               Calidad de impresión superior, diseño cuidado y compromiso en cada
               entrega.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-3 animate-fade-up anim-delay-300">
               <a href="#servicios">
                 <Button className="bg-foreground text-background hover:bg-foreground/90">
                   Ver servicios
@@ -67,7 +87,7 @@ export default function Index() {
           </div>
           <div className="relative">
             <div className="cmyk-bar mb-4"><div></div><div></div><div></div><div></div></div>
-            <div className="rounded-xl border bg-card p-6 shadow-sm">
+            <div className="rounded-xl border bg-card p-6 shadow-sm animate-fade-up anim-delay-200">
               <ul className="grid grid-cols-2 gap-3 text-sm md:grid-cols-3">
                 {servicios.map((s) => (
                   <li key={s} className="flex items-center gap-2">
@@ -82,60 +102,138 @@ export default function Index() {
       </section>
 
       {/* Quienes somos */}
-      <section id="quienes-somos" className="container mx-auto scroll-mt-20 py-20">
+      <section 
+        ref={quienesRef}
+        id="quienes-somos"
+        className={`container mx-auto scroll-mt-20 py-10 ${
+          quienesVisible ? "animate-fade-up" : "opacity-0 translate-y-6"
+        }`}
+        >
         <div className="grid gap-10 md:grid-cols-5">
           <div className="md:col-span-2">
-            <h2 className="text-3xl font-bold tracking-tight">Quiénes somos</h2>
-            <div className="mt-3 h-1 w-24 bg-foreground" />
+            <h2 className="text-4xl font-bold tracking-tight">Quiénes somos</h2>
+            <div className="mt-3 h-1 w-28 bg-gradient-brand" />
           </div>
           <div className="md:col-span-3 space-y-4 text-muted-foreground">
-            <p>Somos una empresa con 20 años de experiencia en el rubro gráfico.</p>
-            <p>
+            <p className="animate-fade-up">Somos una empresa con 20 años de experiencia en el rubro gráfico.</p>
+            <p className="animate-fade-up anim-delay-100">
               Trabajamos ofreciendo la mejor calidad de impresión en distintos
               tipos de materiales.
             </p>
-            <p>
+            <p className="animate-fade-up anim-delay-200">
               Nuestro objetivo es satisfacer las necesidades del cliente, con un
               servicio de atención personalizada, con calidad, precio y
               compromiso en los tiempos de entrega.
             </p>
-            <p>Esperamos contribuir con el desarrollo de su prestigiosa entidad.</p>
+            <p className="animate-fade-up anim-delay-300">Esperamos contribuir con el desarrollo de su prestigiosa entidad.</p>
           </div>
         </div>
       </section>
 
       {/* Servicios */}
-      <section id="servicios" className="relative bg-gradient-to-b from-slate-50 to-white py-20">
+      <section 
+          ref={serviciosRef}
+          id="servicios"
+          className={`relative bg-gradient-to-b from-slate-50 to-white py-20 ${
+            serviciosVisible ? "animate-fade-up" : "opacity-0 translate-y-6"
+          }`}
+        >
         <div className="container mx-auto">
           <div className="mb-8 flex items-end justify-between gap-6">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight">Servicios</h2>
-              <p className="mt-2 max-w-2xl text-muted-foreground">
+              <h2 className="text-4xl font-bold tracking-tight text-gradient-brand">Servicios</h2>
+              <p className="mt-2 max-w-2xl text-lg text-muted-foreground animate-fade-up">
                 Impresión offset y digital con terminaciones de calidad.
               </p>
             </div>
           </div>
+
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {servicios.map((s, idx) => (
-              <div
-                key={s}
-                className="group rounded-xl border bg-card p-6 shadow-sm transition-colors hover:border-foreground/30"
-              >
-                <div className="mb-3 inline-flex items-center gap-2">
-                  <span className={`h-2 w-2 rounded-full ${idx % 3 === 0 ? "bg-brand-cyan" : idx % 3 === 1 ? "bg-brand-magenta" : "bg-brand-yellow"}`} />
-                  <span className="text-sm uppercase tracking-wide text-muted-foreground">
-                    Impresión
-                  </span>
+            {servicios.map((s, idx) => {
+              const color =
+                idx % 3 === 0
+                  ? "from-white to-brand-cyan/10"
+                  : idx % 3 === 1
+                  ? "from-white to-brand-magenta/10"
+                  : "from-white to-brand-yellow/10";
+
+              return (
+                <div
+                  key={s}
+                  className={`group relative overflow-hidden rounded-xl border bg-white p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 animate-fade-up`}
+                  style={{ animationDelay: `${idx * 100}ms` }}
+                >
+                  {/* Imagen de fondo inclinada */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center-left filter grayscale transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:scale-105"
+                    style={{
+                      backgroundImage: `url(${imagenes[s]})`,
+                      
+                      maskImage:
+                        "linear-gradient(135deg, transparent 40%, black 75%)", // controla la diagonal
+                      WebkitMaskImage:
+                        "linear-gradient(135deg, transparent 40%, black 75%)",
+                    }}
+                  />
+
+                  {/* Hover: vuelve a color y hace zoom */}
+                  <div
+                    className="absolute inset-0 z-0"
+                    style={{
+                      backgroundImage: `url(${imagenes[s]})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center left",
+                      filter: "grayscale(0)",
+                      opacity: 0,
+                      transition: "opacity 0.8s ease, transform 0.8s ease",
+                      transform: "scale(1.05)",
+                      maskImage:
+                        "linear-gradient(135deg, transparent 40%, black 75%)",
+                      WebkitMaskImage:
+                        "linear-gradient(135deg, transparent 40%, black 75%)",
+                    }}
+                    aria-hidden="true"
+                  />
+
+                  {/* Efecto hover con pseudo-overlay */}
+                  <style>
+                    {`
+                      .group:hover div[style*="grayscale(1)"] {
+                        filter: grayscale(0);
+                        transform: scale(1.05);
+                      }
+                    `}
+                  </style>
+
+                  {/* Contenido texto */}
+                  <div className="relative z-10 max-w-[60%]">
+                    <div className="mb-3 inline-flex items-center gap-2">
+                      <span
+                        className={`h-2 w-2 rounded-full ${
+                          idx % 3 === 0
+                            ? "bg-brand-cyan"
+                            : idx % 3 === 1
+                            ? "bg-brand-magenta"
+                            : "bg-brand-yellow"
+                        }`}
+                      />
+                      <h3 className="text-lg font-semibold text-foreground">{s}</h3>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold text-foreground">{s}</h3>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="container mx-auto py-16">
+      <section 
+          ref={ctaRef}
+          className={`container mx-auto py-16 ${
+            ctaRef ? "animate-fade-up" : "opacity-0 translate-y-6"
+          }`}
+        >
         <div className="rounded-2xl border bg-foreground p-8 text-background md:p-10">
           <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
             <div>
@@ -154,7 +252,13 @@ export default function Index() {
       </section>
 
       {/* Contacto */}
-      <section id="contacto" className="container mx-auto scroll-mt-20 py-20">
+      <section
+        ref={contactoRef}
+        id="contacto"
+        className={`container mx-auto scroll-mt-20 py-20 ${
+          contactoVisible ? "animate-fade-up" : "opacity-0 translate-y-6"
+        }`}
+       >
         <div className="grid gap-10 md:grid-cols-2">
           <div>
             <h2 className="text-3xl font-bold tracking-tight">Contacto</h2>
