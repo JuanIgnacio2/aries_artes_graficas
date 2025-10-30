@@ -9,13 +9,13 @@ export default function SiteHeader() {
           <BrandLogo />
         </a>
         <nav className="hidden items-center gap-6 md:flex">
-          <a href="#quienes-somos" className="text-sm text-muted-foreground hover:text-foreground transition-transform active:translate-y-[1px]">
+          <a href="#quienes-somos" className="text-md text-muted-foreground hover:text-foreground transition-transform active:translate-y-[1px]">
             Quienes somos
           </a>
-          <a href="#servicios" className="text-sm text-muted-foreground hover:text-foreground transition-transform active:translate-y-[1px]">
+          <a href="#servicios" className="text-md text-muted-foreground hover:text-foreground transition-transform active:translate-y-[1px]">
             Servicios
           </a>
-          <a href="#contacto" className="text-sm text-muted-foreground hover:text-foreground transition-transform active:translate-y-[1px]">
+          <a href="#contacto" className="text-md text-muted-foreground hover:text-foreground transition-transform active:translate-y-[1px]">
             Contacto
           </a>
         </nav>

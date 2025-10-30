@@ -6,10 +6,6 @@
 @tailwind utilities;
 
 @layer base {
-  /**
-   * Tailwind CSS theme
-   * Keep HSL variables to match tailwind.config.ts expectations
-  */
   :root {
     --background: 0 0% 100%;
     --foreground: 230 24% 12%;

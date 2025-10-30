@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
-import { use, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const servicios = [
   "Catálogos",
@@ -17,7 +17,7 @@ const servicios = [
 ];
 
 const imagenes: Record<string, string> = {
-  "Catálogos": "public/assets/images/servicios/catalogo.jpg",
+  "Catálogos": "/assets/images/servicios/catalogo.jpg",
   "Dípticos": "/assets/images/servicios/dipticos.jpg",
   "Trípticos": "/assets/images/servicios/tripticos.jpg",
   "Carpetas": "/assets/images/servicios/carpetas.png",
@@ -25,25 +25,59 @@ const imagenes: Record<string, string> = {
   "Bolsas de papel": "/assets/images/servicios/bolsas.jpg",
   "Calendarios": "/assets/images/servicios/calendarios.jpg",
   "Autoadhesivos": "/assets/images/servicios/autoadhesivos.jpg",
-  "Tarjetas": "public/assets/images/servicios/tarjetas.jpg",
+  "Tarjetas": "/assets/images/servicios/tarjetas.jpg",
 };
 
 export default function Index() {
   const [status, setStatus] = useState<string | null>(null);
+  const serviciosRef = useRef<HTMLDivElement | null>(null);
+  const [serviciosVisible, setServiciosVisible] = useState(false);
+  const [visibleCards, setVisibleCards] = useState<number[]>([]);
+  
+  // Hook para la hero
+  const { ref: heroRef, isVisible: heroVisible } = useInViewAnimation<HTMLDivElement>();
+  const { ref: quienesRef, isVisible: quienesVisible } = useInViewAnimation<HTMLDivElement>();
+  const { ref: ctaRef, isVisible: ctaVisible } = useInViewAnimation<HTMLDivElement>();
+  const { ref: contactoRef, isVisible: contactoVisible } = useInViewAnimation<HTMLDivElement>();
+
+    useEffect(() => {
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => setServiciosVisible(entry.isIntersecting));
+      },
+      { threshold: 0.2 }
+    );
+
+    if (serviciosRef.current) sectionObserver.observe(serviciosRef.current);
+
+    // Observa cada tarjeta
+    const cards = document.querySelectorAll(".servicio-card");
+    const cardObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute("data-index") || "0");
+            setVisibleCards((prev) => [...new Set([...prev, index])]);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    cards.forEach((card) => cardObserver.observe(card));
+
+    return () => {
+      sectionObserver.disconnect();
+      cardObserver.disconnect();
+    };
+  }, []);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("¡Gracias! Te responderemos a la brevedad.");
     (e.currentTarget as HTMLFormElement).reset();
   };
-
-   // Hook para la hero
-  const { ref: heroRef, isVisible: heroVisible } = useInViewAnimation<HTMLDivElement>();
-  const { ref: quienesRef, isVisible: quienesVisible } = useInViewAnimation<HTMLDivElement>();
-  const { ref: serviciosRef, isVisible: serviciosVisible } = useInViewAnimation<HTMLDivElement>();
-  const { ref: ctaRef, isVisible: ctaVisible } = useInViewAnimation<HTMLDivElement>();
-  const { ref: contactoRef, isVisible: contactoVisible } = useInViewAnimation<HTMLDivElement>();
-
+  
   return (
     <main>
       {/* Hero */}
@@ -67,7 +101,7 @@ export default function Index() {
               className="mb-4 h-16 w-auto md:h-20 animate-float"
               onError={(e) => ((e.currentTarget.style.display = "none"))}
             />
-            <h1 className="text-balance text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl md:text-7xl animate-fade-up anim-delay-100">
+            <h1 className="text-balance text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl md:text-7xl animate-fade-up anim-delay-100 text-gradient-brand">
               Aries · Artes Gráficas
             </h1>
             <p className="mt-4 max-w-xl text-xl text-muted-foreground animate-fade-up anim-delay-200">
@@ -88,7 +122,7 @@ export default function Index() {
           <div className="relative">
             <div className="cmyk-bar mb-4"><div></div><div></div><div></div><div></div></div>
             <div className="rounded-xl border bg-card p-6 shadow-sm animate-fade-up anim-delay-200">
-              <ul className="grid grid-cols-2 gap-3 text-sm md:grid-cols-3">
+              <ul className="grid grid-cols-2 gap-3 text-md md:grid-cols-3">
                 {servicios.map((s) => (
                   <li key={s} className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-brand-cyan" />
@@ -111,10 +145,10 @@ export default function Index() {
         >
         <div className="grid gap-10 md:grid-cols-5">
           <div className="md:col-span-2">
-            <h2 className="text-4xl font-bold tracking-tight">Quiénes somos</h2>
+            <h2 className="text-4xl font-bold tracking-tight text-gradient-brand">Quiénes somos</h2>
             <div className="mt-3 h-1 w-28 bg-gradient-brand" />
           </div>
-          <div className="md:col-span-3 space-y-4 text-muted-foreground">
+          <div className="md:col-span-3 space-y-4 text-muted-foreground text-xl">
             <p className="animate-fade-up">Somos una empresa con 20 años de experiencia en el rubro gráfico.</p>
             <p className="animate-fade-up anim-delay-100">
               Trabajamos ofreciendo la mejor calidad de impresión en distintos
@@ -160,8 +194,12 @@ export default function Index() {
               return (
                 <div
                   key={s}
-                  className={`group relative overflow-hidden rounded-xl border bg-white p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 animate-fade-up`}
-                  style={{ animationDelay: `${idx * 100}ms` }}
+                  data-index={idx}
+                  className={`servicio-card group relative overflow-hidden rounded-xl border 
+                              bg-gradient-to-tr ${color} p-6 shadow-sm transition-all duration-500 
+                              hover:shadow-lg hover:-translate-y-1 backdrop-blur-sm
+                              ${visibleCards.includes(idx) ? "animate-fade-up opacity-100" : "opacity-0 translate-y-8"}`}
+                  style={{ animationDelay: `${idx * 150}ms` }}
                 >
                   {/* Imagen de fondo inclinada */}
                   <div
@@ -231,7 +269,7 @@ export default function Index() {
       <section 
           ref={ctaRef}
           className={`container mx-auto py-16 ${
-            ctaRef ? "animate-fade-up" : "opacity-0 translate-y-6"
+            ctaVisible ? "animate-fade-up" : "opacity-0 translate-y-6"
           }`}
         >
         <div className="rounded-2xl border bg-foreground p-8 text-background md:p-10">
@@ -261,7 +299,7 @@ export default function Index() {
        >
         <div className="grid gap-10 md:grid-cols-2">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight">Contacto</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-gradient-brand">Contacto</h2>
             <p className="mt-2 max-w-prose text-muted-foreground">
               Contanos qué necesitás imprimir y te responderemos a la
               brevedad.
