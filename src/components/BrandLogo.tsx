@@ -9,7 +9,7 @@ interface Props {
 export default function BrandLogo({ className, height = 28 }: Props) {
   const [imgOk, setImgOk] = useState(true);
   const srcs = [
-    "https://cdn.builder.io/api/v1/image/assets%2F663c00dc1c6e4b4bb40553918806045f%2F05aeb48d76b0480bae13774c377c646d?format=webp&width=400",
+    "../public/logo-aries.png",
     "/assets/logo-aries.svg",
     "/assets/logo-aries.png",
     "/logo.png",
@@ -35,7 +35,7 @@ export default function BrandLogo({ className, height = 28 }: Props) {
           <span className="bg-foreground" />
         </div>
       )}
-      <span className="font-extrabold tracking-tight">Aries · Artes Gráficas</span>
+      <span className="hidden md:inline font-extrabold tracking-tight">Aries · Artes Gráficas</span>
     </div>
   );
 }
