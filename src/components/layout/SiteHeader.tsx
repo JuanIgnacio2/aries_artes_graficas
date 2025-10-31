@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import BrandLogo from "@/components/BrandLogo";
-import { Menu, X } from "lucide-react";
 
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
