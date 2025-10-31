@@ -8,21 +8,12 @@ interface Props {
 
 export default function BrandLogo({ className, height = 28 }: Props) {
   const [imgOk, setImgOk] = useState(true);
-  const srcs = [
-    "../src/assets/logo-aries.png",
-    "../public/logo-aries.png",
-    "/assets/logo-aries.svg",
-    "/assets/logo-aries.png",
-    "/logo.png",
-    "/logo.svg",
-  ];
 
   return (
     <div className={cn("flex items-center gap-3", className)}>
       {imgOk ? (
         <img
-          src={srcs[0]}
-          srcSet={srcs.join(", ")}
+          src="/logo-aries.png"
           alt="Aries · Artes Gráficas"
           height={height}
           className="h-7 w-auto"
