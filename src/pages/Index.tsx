@@ -202,7 +202,7 @@ export default function Index() {
                 >
                   {/* Imagen de fondo inclinada */}
                   <div
-                    className="absolute inset-0 bg-cover bg-center-left filter grayscale transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:scale-105"
+                    className="absolute inset-0 bg-cover bg-center-left transition-all duration-700 ease-out md:filter md:grayscale md:group-hover:grayscale-0 md:group-hover:scale-105"
                     style={{
                       backgroundImage: `url(${imagenes[s]})`,
                       
