@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import BrandLogo from "@/components/BrandLogo";
+import { Menu, X } from "lucide-react";
 
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -31,6 +32,15 @@ export default function SiteHeader() {
           </a>
         </div>
       </div>
+
+      {/* Botón menú móvil */}
+      <button
+        className="md:hidden p-2 text-foreground"
+        onClick={() => setMenuOpen(!menuOpen)}
+        aria-label="Abrir menú"
+      >
+        {menuOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
 
       {/* Menú móvil desplegable */}
       {menuOpen && (
