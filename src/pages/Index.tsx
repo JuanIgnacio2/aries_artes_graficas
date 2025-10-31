@@ -168,9 +168,8 @@ export default function Index() {
       <section 
           ref={serviciosRef}
           id="servicios"
-          className={`relative bg-gradient-to-b from-slate-50 to-white py-20 ${
-            serviciosVisible ? "animate-fade-up" : "opacity-0 translate-y-6"
-          }`}
+          className={`relative bg-gradient-to-b from-slate-50 to-white py-20 transition-all duration-700 
+                    ${serviciosVisible ? "opacity-100" : "opacity-0 translate-y-6"}`}
         >
         <div className="container mx-auto">
           <div className="mb-8 flex items-end justify-between gap-6">
