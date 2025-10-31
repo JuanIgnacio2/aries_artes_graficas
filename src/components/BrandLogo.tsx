@@ -9,6 +9,7 @@ interface Props {
 export default function BrandLogo({ className, height = 28 }: Props) {
   const [imgOk, setImgOk] = useState(true);
   const srcs = [
+    "../src/assets/logo-aries.png",
     "../public/logo-aries.png",
     "/assets/logo-aries.svg",
     "/assets/logo-aries.png",
