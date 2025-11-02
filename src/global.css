@@ -150,3 +150,39 @@
   .cmyk-bar > div:nth-child(3) { background-color: hsl(var(--brand-yellow)); }
   .cmyk-bar > div:nth-child(4) { background-color: hsl(var(--brand-ink)); }
 }
+
+/* Animación de rotación */
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Blobs principales, con colores CMYK pastel y opacidad */
+.out-top {
+  animation: rotate 20s linear infinite;
+  transform-origin: 13px 25px;
+  fill: rgba(0, 255, 255, 0.2); /* CYAN pastel */
+}
+
+.in-top {
+  animation: rotate 10s linear infinite;
+  transform-origin: 13px 25px;
+  fill: rgba(255, 0, 150, 0.2); /* MAGENTA pastel */
+}
+
+.out-bottom {
+  animation: rotate 25s linear infinite;
+  transform-origin: 84px 93px;
+  fill: rgba(255, 255, 0, 0.2); /* YELLOW pastel */
+}
+
+.in-bottom {
+  animation: rotate 15s linear infinite;
+  transform-origin: 84px 93px;
+  fill: rgba(0, 0, 255, 0.15); /* Key/Black pastel suave */
+}
+
+/* Opcional: suavizar borde de los blobs */
+svg path {
+  vector-effect: non-scaling-stroke;
+}

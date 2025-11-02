@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import SiteHeader from "@/components/layout/SiteHeader";
 import SiteFooter from "@/components/layout/SiteFooter";
 import BackToTop from "@/components/layout/BackToTop";
+import BlobBackground from "./components/layout/BlobBackground";
 
 const queryClient = new QueryClient();
 
@@ -20,14 +21,15 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <SiteHeader />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <BackToTop />
-        <SiteFooter />
+        <BlobBackground />
+          <SiteHeader />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <BackToTop />
+          <SiteFooter />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

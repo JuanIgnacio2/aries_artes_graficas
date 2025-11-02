@@ -83,10 +83,13 @@ export default function Index() {
       {/* Hero */}
       <section 
         ref={heroRef}
-        className={`relative overflow-hidden bg-gradient-to-b from-white to-slate-50 ${
-          heroVisible ? "animate-fade-up" : "opacity-0 translate-y-6"}`}
+        className={`relative overflow-hidden backdrop-blur-sm 
+              bg-white/70 dark:bg-slate-900/60 
+              transition-all duration-700 
+              ${heroVisible ? "animate-fade-up" : "opacity-0 translate-y-6"}`}
         >
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(1200px_600px_at_50%_-200px,theme(colors.brand.cyan)/20%_0%,transparent_60%),radial-gradient(800px_400px_at_80%_0%,theme(colors.brand.magenta)/15%_0%,transparent_60%)]" />
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 
+               [background:radial-gradient(1200px_600px_at_50%_-200px,theme(colors.brand.cyan)/20%_0%,transparent_60%),radial-gradient(800px_400px_at_80%_0%,theme(colors.brand.magenta)/15%_0%,transparent_60%)]" />
         <div className="container mx-auto grid gap-8 py-16 md:grid-cols-2 md:items-center">
           <div>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs text-muted-foreground animate-fade-up">
@@ -96,7 +99,7 @@ export default function Index() {
               <span>Imprenta offset y diseño gráfico</span>
             </div>
             <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F663c00dc1c6e4b4bb40553918806045f%2F05aeb48d76b0480bae13774c377c646d?format=webp&width=600"
+              src="/logo-aries.png"
               alt="Aries · Artes Gráficas"
               className="mb-4 h-16 w-auto md:h-20 animate-float"
               onError={(e) => ((e.currentTarget.style.display = "none"))}
@@ -168,8 +171,9 @@ export default function Index() {
       <section 
           ref={serviciosRef}
           id="servicios"
-          className={`relative bg-gradient-to-b from-slate-50 to-white py-20 transition-all duration-700 
-                    ${serviciosVisible ? "opacity-100" : "opacity-0 translate-y-6"}`}
+          className={`relative backdrop-blur-sm bg-white/60 
+              dark:bg-slate-900/60 py-20 transition-all duration-700 
+              ${serviciosVisible ? "opacity-100" : "opacity-0 translate-y-6"}`}
         >
         <div className="container mx-auto">
           <div className="mb-8 flex items-end justify-between gap-6">
