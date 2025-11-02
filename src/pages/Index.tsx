@@ -7,24 +7,32 @@ import { useEffect, useRef, useState } from "react";
 const servicios = [
   "Catálogos",
   "Dípticos",
+  "Facturas",
   "Trípticos",
   "Carpetas",
+  "Recibos",
   "Afiches",
   "Bolsas de papel",
+  "Remitos",
   "Calendarios",
   "Autoadhesivos",
+  "Recetarios",
   "Tarjetas",
 ];
 
 const imagenes: Record<string, string> = {
   "Catálogos": "/assets/images/servicios/catalogo.jpg",
   "Dípticos": "/assets/images/servicios/dipticos.jpg",
+  "Facturas":"/assets/images/servicios/facturas.jpg",
   "Trípticos": "/assets/images/servicios/tripticos.jpg",
   "Carpetas": "/assets/images/servicios/carpetas.png",
+  "Recibos":"/assets/images/servicios/recibos.jpeg",
   "Afiches": "/assets/images/servicios/afiches.jpg",
   "Bolsas de papel": "/assets/images/servicios/bolsas.jpg",
+  "Remitos":"/assets/images/servicios/remito.jpg",
   "Calendarios": "/assets/images/servicios/calendarios.jpg",
   "Autoadhesivos": "/assets/images/servicios/autoadhesivos.jpg",
+  "Recetarios":"/assets/images/servicios/recetario.webp",
   "Tarjetas": "/assets/images/servicios/tarjetas.jpg",
 };
 
@@ -206,7 +214,7 @@ export default function Index() {
                 >
                   {/* Imagen de fondo inclinada */}
                   <div
-                    className="absolute inset-0 bg-cover bg-center-left transition-all duration-700 ease-out md:filter md:grayscale md:group-hover:grayscale-0 md:group-hover:scale-105"
+                    className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out md:filter md:grayscale md:group-hover:grayscale-0 md:group-hover:scale-105"
                     style={{
                       backgroundImage: `url(${imagenes[s]})`,
                       
