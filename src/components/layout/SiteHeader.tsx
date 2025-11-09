@@ -1,11 +1,30 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import BrandLogo from "@/components/BrandLogo";
-import { Menu, X } from "lucide-react";
+import BrandLogo from "@/components/layout/BrandLogo";
+import { Menu, X, Instagram, Facebook } from "lucide-react";
+import { RiWhatsappLine } from "react-icons/ri";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Componente reutilizable para los tooltips de redes sociales
+  const SocialTooltip = ({ children, content }: { children: React.ReactNode; content: string }) => (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        {children}
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>{content}</p>
+      </TooltipContent>
+    </Tooltip>
+  );
 
   // Cerrar el menú al hacer clic fuera de él
   useEffect(() => {
@@ -26,16 +45,15 @@ export default function SiteHeader() {
     };
   }, [menuOpen]);
 
-  /*<header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">*/
-  /*<header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">*/
   return (
     <header className="sticky top-0 z-50 w-full border-b supports-[backdrop-filter]:bg-background/90 shadow-sm">
       {/* Contenedor principal */}
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 relative">
-        {/* Logo */}
-        <a href="/" className="group flex items-center gap-2">
-          <BrandLogo />
-        </a>
+      <TooltipProvider>
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 relative">
+          {/* Logo */}
+          <a href="/" className="group flex items-center gap-2">
+            <BrandLogo />
+          </a>
 
         {/* Navegación escritorio */}
         <nav className="hidden md:flex items-center gap-6">
@@ -61,11 +79,21 @@ export default function SiteHeader() {
 
         {/* Botón WhatsApp escritorio */}
         <div className="hidden md:flex items-center gap-2 relative">
-          <a href="https://wa.me/541158566275" target="_blank" rel="noreferrer">
-            <Button className="bg-brand-whatsapp text-white hover:bg-brand-whatsapp/90 active:translate-y-[1px] transition-transform">
-              WhatsApp
-            </Button>
-          </a>
+          <SocialTooltip content="Contactanos por WhatsApp">
+            <a href="https://wa.me/541158566275" target="_blank" rel="noreferrer" className="text-foreground/70 hover:text-foreground">
+              <RiWhatsappLine className="h-5 w-5" />
+            </a>
+          </SocialTooltip>
+          <SocialTooltip content="Síguenos en Instagram">
+            <a href="https://www.instagram.com/ariesartesgraficas?igsh=MXkxcjR3eHpvMnRlcA==" target="_blank" rel="noreferrer" aria-label="Instagram" className="text-foreground/70 hover:text-foreground">
+              <Instagram className="h-5 w-5" />
+            </a>
+          </SocialTooltip>
+          <SocialTooltip content="Síguenos en Facebook">
+            <a href="https://facebook.com/" target="_blank" rel="noreferrer" aria-label="Facebook" className="text-foreground/70 hover:text-foreground">
+             <Facebook className="h-5 w-5" />
+            </a>
+          </SocialTooltip>
         </div>
 
         {/* Botón menú móvil */}
@@ -119,17 +147,23 @@ export default function SiteHeader() {
           </div>
 
           {/* Inferior */}
-          <div className="flex flex-col items-center gap-3 mb-10 py-6 pb-safe">
-            <a
-              href="https://wa.me/541158566275"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => setMenuOpen(false)}
-            >
-              <Button className="bg-brand-whatsapp text-white hover:bg-brand-whatsapp/90">
-                WhatsApp
-              </Button>
-            </a>
+          <div className="flex flex-col items-center gap-3 mb-10 py-2 pb-safe">
+            <div className="flex gap-5">
+              <a
+                href="https://wa.me/541158566275"
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setMenuOpen(false)}
+              >
+                <RiWhatsappLine className="h-5 w-5" />
+              </a>
+              <a href="https://www.instagram.com/ariesartesgraficas?igsh=MXkxcjR3eHpvMnRlcA==" target="_blank" rel="noreferrer" aria-label="Instagram" className="text-foreground/70 hover:text-foreground">
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a href="https://facebook.com/" target="_blank" rel="noreferrer" aria-label="Facebook" className="text-foreground/70 hover:text-foreground">
+                <Facebook className="h-5 w-5" />
+              </a>
+            </div>
             <small className="text-xs text-muted-foreground">
               © 2025 Aries Artes Gráficas
             </small>
@@ -141,6 +175,7 @@ export default function SiteHeader() {
       <div className="cmyk-bar">
         <div></div><div></div><div></div><div></div>
       </div>
+      </TooltipProvider>
     </header>
   );
 }

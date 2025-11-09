@@ -3,6 +3,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 import { useEffect, useRef, useState } from "react";
+import { RiWhatsappLine } from "react-icons/ri";
+import { Menu, X, Instagram, Facebook } from "lucide-react";
+import ContactForm from "@/components/layout/ContactForm";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const servicios = [
   "Catálogos",
@@ -79,14 +88,9 @@ export default function Index() {
       cardObserver.disconnect();
     };
   }, []);
-
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus("¡Gracias! Te responderemos a la brevedad.");
-    (e.currentTarget as HTMLFormElement).reset();
-  };
   
   return (
+    <TooltipProvider>
     <main>
       {/* Hero */}
       <section 
@@ -120,14 +124,75 @@ export default function Index() {
               entrega.
             </p>
             <div className="mt-8 flex flex-wrap gap-3 animate-fade-up anim-delay-300">
-              <a href="#servicios">
-                <Button className="bg-foreground text-background hover:bg-foreground/90">
-                  Ver servicios
-                </Button>
-              </a>
-              <a href="https://wa.me/541158566275" target="_blank" rel="noreferrer">
-                <Button className="bg-brand-whatsapp text-white hover:bg-brand-whatsapp/90 transition-transform active:translate-y-[1px]">WhatsApp</Button>
-              </a>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href="#servicios"
+                    className="inline-block"
+                    aria-label="Ver servicios"
+                  >
+                    <Button
+                      className="bg-foreground text-background hover:bg-foreground/90"
+                    >
+                      Ver servicios
+                    </Button>
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Ver servicios</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href="https://wa.me/541158566275"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-foreground/70 hover:text-foreground"
+                    aria-label="WhatsApp"
+                  >
+                    <RiWhatsappLine className="h-10 w-10" />
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Contactanos por WhatsApp</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href="https://www.instagram.com/ariesartesgraficas?igsh=MXkxcjR3eHpvMnRlcA=="
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-foreground/70 hover:text-foreground"
+                    aria-label="Instagram"
+                  >
+                    <Instagram className="h-10 w-10" />
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Síguenos en Instagram</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href="https://facebook.com/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-foreground/70 hover:text-foreground"
+                    aria-label="Facebook"
+                  >
+                    <Facebook className="h-10 w-10" />
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Síguenos en Facebook</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
           <div className="relative">
@@ -304,7 +369,7 @@ export default function Index() {
       <section
         ref={contactoRef}
         id="contacto"
-        className={`container mx-auto scroll-mt-20 py-20 ${
+        className={`container mx-auto scroll-mt-20 py-10 ${
           contactoVisible ? "animate-fade-up" : "opacity-0 translate-y-6"
         }`}
        >
@@ -317,24 +382,11 @@ export default function Index() {
             </p>
             <div className="mt-6 rounded-xl border bg-card p-6">
               <p className="text-sm text-muted-foreground">
-                También podés escribirnos a <span className="font-semibold text-foreground">info@ariesartesgraficas.com</span>
+                También podés escribirnos a <span className="font-semibold text-foreground">ariesartesgraficas@gmail.com</span>
               </p>
             </div>
           </div>
-          <form onSubmit={onSubmit} className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input name="nombre" placeholder="Nombre" required />
-              <Input name="email" type="email" placeholder="Email" required />
-            </div>
-            <Input name="telefono" type="tel" placeholder="Teléfono" />
-            <Textarea name="mensaje" placeholder="Detalle del trabajo, cantidades, medidas…" required />
-            <div className="flex items-center gap-3">
-              <Button type="submit" className="bg-foreground text-background hover:bg-foreground/90">
-                Enviar consulta
-              </Button>
-              {status && <p className="text-sm text-green-600">{status}</p>}
-            </div>
-          </form>
+          <ContactForm />
         </div>
         <div className="mt-10 overflow-hidden rounded-xl border">
           <iframe
@@ -348,5 +400,6 @@ export default function Index() {
         </div>
       </section>
     </main>
+    </TooltipProvider>
   );
 }
