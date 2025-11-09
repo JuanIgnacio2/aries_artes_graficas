@@ -1,10 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 import { useEffect, useRef, useState } from "react";
 import { RiWhatsappLine } from "react-icons/ri";
-import { Menu, X, Instagram, Facebook } from "lucide-react";
+import { Instagram, Facebook } from "lucide-react";
 import ContactForm from "@/components/layout/ContactForm";
 import {
   Tooltip,
@@ -46,7 +44,6 @@ const imagenes: Record<string, string> = {
 };
 
 export default function Index() {
-  const [status, setStatus] = useState<string | null>(null);
   const serviciosRef = useRef<HTMLDivElement | null>(null);
   const [serviciosVisible, setServiciosVisible] = useState(false);
   const [visibleCards, setVisibleCards] = useState<number[]>([]);

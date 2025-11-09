@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
 import BrandLogo from "@/components/layout/BrandLogo";
 import { Menu, X, Instagram, Facebook } from "lucide-react";
 import { RiWhatsappLine } from "react-icons/ri";
