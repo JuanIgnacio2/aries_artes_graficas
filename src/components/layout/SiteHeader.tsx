@@ -152,6 +152,7 @@ export default function SiteHeader() {
                 href="https://wa.me/541158566275"
                 target="_blank"
                 rel="noreferrer"
+                className="text-foreground/70 hover:text-foreground"
                 onClick={() => setMenuOpen(false)}
               >
                 <RiWhatsappLine className="h-5 w-5" />

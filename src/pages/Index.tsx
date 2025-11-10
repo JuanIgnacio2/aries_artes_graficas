@@ -2,7 +2,8 @@ import { Button } from "@/components/ui/button";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 import { useEffect, useRef, useState } from "react";
 import { RiWhatsappLine } from "react-icons/ri";
-import { Instagram, Facebook } from "lucide-react";
+import { GrFacebookOption } from "react-icons/gr";
+import { Instagram } from "lucide-react";
 import ContactForm from "@/components/layout/ContactForm";
 import {
   Tooltip,
@@ -183,7 +184,7 @@ export default function Index() {
                     className="text-foreground/70 hover:text-foreground"
                     aria-label="Facebook"
                   >
-                    <Facebook className="h-10 w-10" />
+                    <GrFacebookOption className="h-10 w-10" />
                   </a>
                 </TooltipTrigger>
                 <TooltipContent>
