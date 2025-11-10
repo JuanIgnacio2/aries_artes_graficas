@@ -388,9 +388,10 @@ export default function Index() {
         <div className="mt-10 overflow-hidden rounded-xl border">
           <iframe
             title="Mapa - Irigoyen 1013, Hasenkamp"
-            src="https://www.google.com/maps?q=Irigoyen%201013%2C%20Hasenkamp%2C%20Entre%20R%C3%ADos&output=embed"
+            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3401.207701780278!2d-59.839024605014544!3d-31.518454875950233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzHCsDMxJzA4LjQiUyA1OcKwNTAnMTcuNCJX!5e0!3m2!1ses-419!2sus!4v1762730430164!5m2!1ses-419!2sus"
             width="100%"
             height="360"
+            className="border-0"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
