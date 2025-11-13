@@ -6,6 +6,20 @@ import { GrFacebookOption } from "react-icons/gr";
 import { Instagram } from "lucide-react";
 import ContactForm from "@/components/layout/ContactForm";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -23,9 +37,10 @@ const servicios = [
   "Bolsas de papel",
   "Remitos",
   "Calendarios",
-  "Autoadhesivos",
+  "Stickers",
   "Recetarios",
   "Tarjetas",
+  "Sobres",
 ];
 
 const imagenes: Record<string, string> = {
@@ -39,15 +54,20 @@ const imagenes: Record<string, string> = {
   "Bolsas de papel": "/assets/images/servicios/bolsas.jpg",
   "Remitos":"/assets/images/servicios/remito.jpg",
   "Calendarios": "/assets/images/servicios/calendarios.jpg",
-  "Autoadhesivos": "/assets/images/servicios/autoadhesivos.jpg",
+  "Stickers": "/assets/images/servicios/autoadhesivos.jpg",
   "Recetarios":"/assets/images/servicios/recetario.webp",
   "Tarjetas": "/assets/images/servicios/tarjetas.jpg",
+  "Sobres": "/assets/images/servicios/sobres.jpg",
 };
 
 export default function Index() {
   const serviciosRef = useRef<HTMLDivElement | null>(null);
   const [serviciosVisible, setServiciosVisible] = useState(false);
   const [visibleCards, setVisibleCards] = useState<number[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalImages, setModalImages] = useState<string[]>([]);
+  const [modalTitle, setModalTitle] = useState<string>("");
+  const carouselApiRef = useRef<any>(null);
   
   // Hook para la hero
   const { ref: heroRef, isVisible: heroVisible } = useInViewAnimation<HTMLDivElement>();
@@ -209,6 +229,62 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Modal con carrusel de imágenes por servicio */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="w-[calc(100%-2rem)] sm:max-w-2xl mx-auto rounded-lg border bg-card p-4 sm:p-6 overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:fade-in data-[state=closed]:fade-out">
+          {/* Close button discreto */}
+          <button
+            onClick={() => setIsModalOpen(false)}
+            className="absolute right-4 top-4 opacity-50 hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground"
+            aria-label="Cerrar"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+
+          <DialogHeader className="p-0">
+            <div className="w-full rounded-md bg-gradient-to-r from-brand-cyan/8 via-brand-magenta/6 to-brand-yellow/8 p-4 mb-3 text-center">
+              <DialogTitle className="text-center text-gradient-brand text-2xl sm:text-3xl font-bold">{modalTitle}</DialogTitle>
+              <DialogDescription className="text-center text-sm sm:text-base text-muted-foreground mt-2">
+                Desliza para ver muestras de nuestros trabajos.
+              </DialogDescription>
+            </div>
+          </DialogHeader>
+
+          <div className="mt-2 relative px-12 sm:px-16">
+            <Carousel 
+              opts={{ loop: true }}
+              setApi={(api) => {
+                carouselApiRef.current = api;
+                // Autoplay: cambiar imagen cada 4 segundos
+                const interval = setInterval(() => {
+                  api?.scrollNext();
+                }, 4000);
+                return () => clearInterval(interval);
+              }}
+            >
+              <CarouselContent>
+                {modalImages.map((src, i) => (
+                  <CarouselItem key={i} className="rounded">
+                    <div className="w-full h-48 sm:h-64 md:h-80 lg:h-96 flex items-center justify-center bg-muted/10 rounded">
+                      <img
+                        src={src}
+                        alt={`${modalTitle} ${i + 1}`}
+                        className="max-w-full max-h-full object-contain rounded"
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="absolute -left-10 sm:-left-14 top-1/2 -translate-y-1/2 z-10" />
+              <CarouselNext className="absolute -right-10 sm:-right-14 top-1/2 -translate-y-1/2 z-10" />
+            </Carousel>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Quienes somos */}
       <section 
         ref={quienesRef}
@@ -256,7 +332,7 @@ export default function Index() {
             </div>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
             {servicios.map((s, idx) => {
               const color =
                 idx % 3 === 0
@@ -269,11 +345,27 @@ export default function Index() {
                 <div
                   key={s}
                   data-index={idx}
+                  // Hacemos las cards más grandes y clicables
                   className={`servicio-card group relative overflow-hidden rounded-xl border 
-                              bg-gradient-to-tr ${color} p-6 shadow-sm transition-all duration-500 
-                              hover:shadow-lg hover:-translate-y-1 backdrop-blur-sm
+                              bg-gradient-to-tr ${color} p-6 sm:p-8 min-h-[200px] sm:min-h-[260px] shadow-sm transition-all duration-500 
+                              hover:shadow-lg hover:-translate-y-1 backdrop-blur-sm cursor-pointer
                               ${visibleCards.includes(idx) ? "animate-fade-up opacity-100" : "opacity-0 translate-y-8"}`}
                   style={{ animationDelay: `${idx * 150}ms` }}
+                  onClick={() => {
+                    // Abrir modal con imágenes relacionadas (convención: public/assets/images/modals/<slug>/1.jpg...)
+                    // Generar slug seguro: normalizar (quitar acentos), espacios => '_' y eliminar caracteres no permitidos
+                    const slug = s
+                      .normalize("NFD")
+                      .replace(/\p{Diacritic}/gu, "")
+                      .replace(/\s+/g, "_")
+                      .replace(/[^a-zA-Z0-9_]/g, "")
+                      .toLowerCase();
+                    // Convención: nombre_de_la_card_numero.jpg (4 imágenes por card)
+                    const imgs = [1, 2, 3, 4].map((n) => `/assets/images/modals/${slug}_${n}.jpg`);
+                    setModalImages(imgs);
+                    setModalTitle(s);
+                    setIsModalOpen(true);
+                  }}
                 >
                   {/* Imagen de fondo inclinada */}
                   <div
