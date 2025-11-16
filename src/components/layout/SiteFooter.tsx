@@ -47,7 +47,7 @@ export default function SiteFooter() {
               </a>
             </SocialTooltip>
             <SocialTooltip content="Síguenos en Facebook">
-              <a href="https://facebook.com/" target="_blank" rel="noreferrer" aria-label="Facebook" className="text-foreground/70 hover:text-foreground">
+              <a href="https://www.facebook.com/share/1GhMYHmn9E/" target="_blank" rel="noreferrer" aria-label="Facebook" className="text-foreground/70 hover:text-foreground">
                 <Facebook className="h-5 w-5" />
               </a>
             </SocialTooltip>

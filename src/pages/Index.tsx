@@ -44,20 +44,20 @@ const servicios = [
 ];
 
 const imagenes: Record<string, string> = {
-  "Catálogos": "/assets/images/servicios/catalogo.jpg",
-  "Dípticos": "/assets/images/servicios/dipticos.jpg",
-  "Facturas":"/assets/images/servicios/facturas.jpg",
-  "Trípticos": "/assets/images/servicios/tripticos.jpg",
-  "Carpetas": "/assets/images/servicios/carpetas.png",
-  "Recibos":"/assets/images/servicios/recibos.jpeg",
-  "Afiches": "/assets/images/servicios/afiches.jpg",
-  "Bolsas de papel": "/assets/images/servicios/bolsas.jpg",
-  "Remitos":"/assets/images/servicios/remito.jpg",
-  "Calendarios": "/assets/images/servicios/calendarios.jpg",
-  "Stickers": "/assets/images/servicios/autoadhesivos.jpg",
+  "Catálogos": "/assets/images/servicios/catalogo.webp",
+  "Dípticos": "/assets/images/servicios/dipticos.webp",
+  "Facturas":"/assets/images/servicios/facturas.webp",
+  "Trípticos": "/assets/images/servicios/tripticos.webp",
+  "Carpetas": "/assets/images/servicios/carpetas.webp",
+  "Recibos":"/assets/images/servicios/recibos.webp",
+  "Afiches": "/assets/images/servicios/afiches.webp",
+  "Bolsas de papel": "/assets/images/servicios/bolsas.webp",
+  "Remitos":"/assets/images/servicios/remito.webp",
+  "Calendarios": "/assets/images/servicios/calendarios.webp",
+  "Stickers": "/assets/images/servicios/autoadhesivos.webp",
   "Recetarios":"/assets/images/servicios/recetario.webp",
-  "Tarjetas": "/assets/images/servicios/tarjetas.jpg",
-  "Sobres": "/assets/images/servicios/sobres.jpg",
+  "Tarjetas": "/assets/images/servicios/tarjetas.webp",
+  "Sobres": "/assets/images/servicios/sobres.webp",
 };
 
 export default function Index() {
@@ -68,6 +68,9 @@ export default function Index() {
   const [modalImages, setModalImages] = useState<string[]>([]);
   const [modalTitle, setModalTitle] = useState<string>("");
   const carouselApiRef = useRef<any>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const restartAutoplayTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Hook para la hero
   const { ref: heroRef, isVisible: heroVisible } = useInViewAnimation<HTMLDivElement>();
@@ -75,7 +78,7 @@ export default function Index() {
   const { ref: ctaRef, isVisible: ctaVisible } = useInViewAnimation<HTMLDivElement>();
   const { ref: contactoRef, isVisible: contactoVisible } = useInViewAnimation<HTMLDivElement>();
 
-    useEffect(() => {
+  useEffect(() => {
     const sectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => setServiciosVisible(entry.isIntersecting));
@@ -106,6 +109,60 @@ export default function Index() {
       cardObserver.disconnect();
     };
   }, []);
+
+  // Función para reiniciar el autoplay
+  const restartAutoplay = () => {
+    // Limpiar timeout anterior
+    if (restartAutoplayTimeoutRef.current) {
+      clearTimeout(restartAutoplayTimeoutRef.current);
+    }
+    // Limpiar intervalo anterior
+    if (autoplayIntervalRef.current) {
+      clearInterval(autoplayIntervalRef.current);
+    }
+
+    // Esperar a que termine la interacción y luego reiniciar autoplay
+    restartAutoplayTimeoutRef.current = setTimeout(() => {
+      if (carouselApiRef.current) {
+        autoplayIntervalRef.current = setInterval(() => {
+          carouselApiRef.current?.scrollNext();
+        }, 4000);
+      }
+    }, 300);
+  };
+
+  // Controlar autoplay del carrusel cuando está abierto
+  useEffect(() => {
+    if (!isModalOpen) {
+      // Limpiar intervalo si el modal se cierra
+      if (autoplayIntervalRef.current) {
+        clearInterval(autoplayIntervalRef.current);
+        autoplayIntervalRef.current = null;
+      }
+      if (restartAutoplayTimeoutRef.current) {
+        clearTimeout(restartAutoplayTimeoutRef.current);
+        restartAutoplayTimeoutRef.current = null;
+      }
+      return;
+    }
+
+    // Esperar a que el carousel se monte y luego iniciar autoplay
+    const timeout = setTimeout(() => {
+      if (carouselApiRef.current) {
+        autoplayIntervalRef.current = setInterval(() => {
+          carouselApiRef.current?.scrollNext();
+        }, 4000);
+      }
+    }, 100);
+
+    return () => {
+      clearTimeout(timeout);
+      if (autoplayIntervalRef.current) {
+        clearInterval(autoplayIntervalRef.current);
+        autoplayIntervalRef.current = null;
+      }
+    };
+  }, [isModalOpen]);
   
   return (
     <TooltipProvider>
@@ -198,7 +255,7 @@ export default function Index() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <a
-                    href="https://facebook.com/"
+                    href="https://www.facebook.com/share/1GhMYHmn9E/"
                     target="_blank"
                     rel="noreferrer"
                     className="text-foreground/70 hover:text-foreground"
@@ -258,11 +315,23 @@ export default function Index() {
               opts={{ loop: true }}
               setApi={(api) => {
                 carouselApiRef.current = api;
-                // Autoplay: cambiar imagen cada 4 segundos
-                const interval = setInterval(() => {
-                  api?.scrollNext();
-                }, 4000);
-                return () => clearInterval(interval);
+                // Rastrear índice actual
+                const updateIndex = () => {
+                  if (api?.selectedScrollSnap) {
+                    setCurrentImageIndex(api.selectedScrollSnap());
+                  }
+                };
+                updateIndex();
+                api?.on("select", () => {
+                  updateIndex();
+                  // Reiniciar autoplay cuando cambias de slide (click en siguiente/anterior o indicadores)
+                  restartAutoplay();
+                });
+                
+                // También reiniciar autoplay cuando toques/deslices
+                api?.on("pointerDown", () => {
+                  restartAutoplay();
+                });
               }}
             >
               <CarouselContent>
@@ -281,6 +350,26 @@ export default function Index() {
               <CarouselPrevious className="absolute -left-10 sm:-left-14 top-1/2 -translate-y-1/2 z-10" />
               <CarouselNext className="absolute -right-10 sm:-right-14 top-1/2 -translate-y-1/2 z-10" />
             </Carousel>
+
+            {/* Image indicators */}
+            <div className="flex items-center justify-center gap-2 mt-4">
+              {Array.from({ length: modalImages.length }).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    carouselApiRef.current?.scrollTo(index);
+                    setCurrentImageIndex(index);
+                    restartAutoplay();
+                  }}
+                  className={`h-2 rounded-full transition-all ${
+                    index === currentImageIndex
+                      ? "w-6 bg-foreground"
+                      : "w-2 bg-muted-foreground"
+                  }`}
+                  aria-label={`Ir a imagen ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
@@ -361,7 +450,7 @@ export default function Index() {
                       .replace(/[^a-zA-Z0-9_]/g, "")
                       .toLowerCase();
                     // Convención: nombre_de_la_card_numero.jpg (4 imágenes por card)
-                    const imgs = [1, 2, 3, 4].map((n) => `/assets/images/modals/${slug}_${n}.jpg`);
+                    const imgs = [1, 2, 3, 4].map((n) => `/assets/images/modals/${slug}_${n}.webp`);
                     setModalImages(imgs);
                     setModalTitle(s);
                     setIsModalOpen(true);
