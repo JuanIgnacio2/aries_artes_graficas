@@ -85,12 +85,18 @@ export default function Index() {
       (entries) => {
         entries.forEach((entry) => setServiciosVisible(entry.isIntersecting));
       },
-      { threshold: 0.2 }
+      { threshold: 0.01 }
     );
 
     if (serviciosRef.current) sectionObserver.observe(serviciosRef.current);
 
-    // Observa cada tarjeta
+    return () => {
+      sectionObserver.disconnect();
+    };
+  }, []);
+
+  // Observar las cards cuando se renderizan
+  useEffect(() => {
     const cards = document.querySelectorAll(".servicio-card");
     const cardObserver = new IntersectionObserver(
       (entries) => {
@@ -101,16 +107,15 @@ export default function Index() {
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.01 }
     );
 
     cards.forEach((card) => cardObserver.observe(card));
 
     return () => {
-      sectionObserver.disconnect();
       cardObserver.disconnect();
     };
-  }, []);
+  }, [servicios]); // Re-ejecutar cuando servicios cambia
 
   // Función para reiniciar el autoplay
   const restartAutoplay = () => {
@@ -388,7 +393,7 @@ export default function Index() {
           {/* Close button */}
           <button
             onClick={() => setIsFullscreenImageOpen(false)}
-            className="absolute right-4 top-4 sm:right-6 sm:top-6 md:right-8 md:top-8 z-50 opacity-70 hover:opacity-100 transition-opacity text-white"
+            className="fixed right-4 top-20 sm:right-6 sm:top-24 md:right-8 md:top-8 z-50 opacity-70 hover:opacity-100 transition-opacity text-white"
             aria-label="Cerrar"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
