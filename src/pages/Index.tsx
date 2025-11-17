@@ -388,7 +388,7 @@ export default function Index() {
           {/* Close button */}
           <button
             onClick={() => setIsFullscreenImageOpen(false)}
-            className="absolute right-4 top-4 z-50 opacity-70 hover:opacity-100 transition-opacity text-white"
+            className="absolute right-4 bottom-4 sm:right-6 sm:bottom-6 md:right-8 md:top-8 z-50 opacity-70 hover:opacity-100 transition-opacity text-white"
             aria-label="Cerrar"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
