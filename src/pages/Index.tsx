@@ -67,6 +67,8 @@ export default function Index() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImages, setModalImages] = useState<string[]>([]);
   const [modalTitle, setModalTitle] = useState<string>("");
+  const [isFullscreenImageOpen, setIsFullscreenImageOpen] = useState(false);
+  const [fullscreenImageSrc, setFullscreenImageSrc] = useState<string>("");
   const carouselApiRef = useRef<any>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -337,7 +339,13 @@ export default function Index() {
               <CarouselContent>
                 {modalImages.map((src, i) => (
                   <CarouselItem key={i} className="rounded">
-                    <div className="w-full h-48 sm:h-64 md:h-80 lg:h-96 flex items-center justify-center bg-muted/10 rounded">
+                    <div 
+                      className="w-full h-48 sm:h-64 md:h-80 lg:h-96 flex items-center justify-center bg-muted/10 rounded cursor-pointer hover:bg-muted/20 transition-colors"
+                      onClick={() => {
+                        setFullscreenImageSrc(src);
+                        setIsFullscreenImageOpen(true);
+                      }}
+                    >
                       <img
                         src={src}
                         alt={`${modalTitle} ${i + 1}`}
@@ -370,6 +378,32 @@ export default function Index() {
                 />
               ))}
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de imagen en tamaño completo */}
+      <Dialog open={isFullscreenImageOpen} onOpenChange={setIsFullscreenImageOpen}>
+        <DialogContent className="w-screen h-screen max-w-none max-h-none p-4 sm:p-6 md:p-8 rounded-none border-0 bg-black/95 flex items-center justify-center">
+          {/* Close button */}
+          <button
+            onClick={() => setIsFullscreenImageOpen(false)}
+            className="absolute right-4 top-4 z-50 opacity-70 hover:opacity-100 transition-opacity text-white"
+            aria-label="Cerrar"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+
+          {/* Imagen en tamaño completo */}
+          <div className="w-full h-full flex items-center justify-center">
+            <img
+              src={fullscreenImageSrc}
+              alt="Imagen ampliada"
+              className="max-w-full max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)] md:max-h-[calc(100vh-4rem)] object-contain"
+            />
           </div>
         </DialogContent>
       </Dialog>
